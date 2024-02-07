@@ -48,7 +48,7 @@ class SoapClient {
       });
     });
 
-    return envelope.build().toXmlString(pretty: true);
+    return envelope.buildDocument().toXmlString(pretty: true);
   }
 
   String _parseSoapResponse(String response) {
