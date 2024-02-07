@@ -46,29 +46,6 @@ class SoapClient {
     }
   }
 
-  String parseResponseDataElement(String wsdlContent, String operationName) {
-    final document = xml.XmlDocument.parse(wsdlContent);
-    final operationElement = document.findAllElements('operation').firstWhere(
-        (element) => element.getAttribute('name') == operationName,
-        orElse: () => null);
-
-    if (operationElement != null) {
-      final outputElementName =
-          operationElement.findElements('output').first.getAttribute('message');
-      final responseDataElementName = document
-          .findAllElements('message')
-          .firstWhere(
-              (element) => element.getAttribute('name') == outputElementName,
-              orElse: () => null)
-          .findAllElements('part')
-          .first
-          .getAttribute('name');
-      return responseDataElementName;
-    } else {
-      throw Exception('Operation "$operationName" not found in the WSDL file.');
-    }
-  }
-
   String _buildSoapEnvelope(
       String methodName, Map<String, dynamic> parameters) {
     // Customize this method to construct the SOAP envelope based on the WSDL of your web service.
