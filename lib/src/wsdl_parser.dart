@@ -55,7 +55,7 @@ class WsdlParser {
   Future<String> parseResponseDataElement(String operationName) async {
     final document = await wsdlDocument;
     final operationElement = document
-        .findAllElements('operation')
+        .findAllElements('operation', namespace: '*')
         .firstWhere((element) => element.getAttribute('name') == operationName);
 
     final outputElementName =
