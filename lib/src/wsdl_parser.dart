@@ -54,21 +54,20 @@ class WsdlParser {
 
   Future<String> parseResponseDataElement(String operationName) async {
     final document = await wsdlDocument;
-    final operationElement = document.findAllElements('operation').firstWhere(
-        (element) => element.getAttribute('name') == operationName,
-        orElse: () => null);
+    final operationElement = document
+        .findAllElements('operation')
+        .firstWhere((element) => element.getAttribute('name') == operationName);
 
-    if (operationElement != null) {
-      final outputElementName =
-          operationElement.findElements('output').first.getAttribute('message');
-      final responseDataElementName = document
-          .findAllElements('message')
-          .firstWhere(
-              (element) => element.getAttribute('name') == outputElementName,
-              orElse: () => null)
-          .findAllElements('part')
-          .first
-          .getAttribute('name');
+    final outputElementName =
+        operationElement.findElements('output').first.getAttribute('message');
+    final responseDataElementName = document
+        .findAllElements('message')
+        .firstWhere(
+            (element) => element.getAttribute('name') == outputElementName)
+        .findAllElements('part')
+        .first
+        .getAttribute('name');
+    if (responseDataElementName != null) {
       return responseDataElementName;
     } else {
       throw Exception('Operation "$operationName" not found in the WSDL file.');
