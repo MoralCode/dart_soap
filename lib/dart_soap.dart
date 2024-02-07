@@ -32,6 +32,9 @@ class SoapClient {
   Future<String> callWebService(
       String methodName, Map<String, dynamic> parameters) async {
     final soapEnvelope = _buildSoapEnvelope(methodName, parameters);
+    if (debug) {
+      print('SOAP Envelope being sent: $soapEnvelope');
+    }
     final response = await http.post(
       Uri.parse(await soapEndpoint),
       headers: {
@@ -81,6 +84,9 @@ class SoapClient {
       String response, String methodName) async {
     // Customize this method to parse the SOAP response.
     // This is a simplified example.
+    if (debug) {
+      print('SOAP Response being received: $response');
+    }
     final response_document = xml.XmlDocument.parse(response);
     final response_element_name =
         await wsdl.parseResponseDataElement(methodName);
