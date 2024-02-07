@@ -1,18 +1,37 @@
 library dart_soap;
 
+import 'package:dart_soap/src/wsdl_parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart' as xml;
 
 class SoapClient {
-  final String endpoint;
+  final WsdlParser wsdl;
 
-  SoapClient(this.endpoint);
+  String _cachedSOAPEndpoint = '';
+
+  Future<String> get soapEndpoint async {
+    // If the value is already cached, return it immediately
+    if (_cachedSOAPEndpoint.isNotEmpty) {
+      return _cachedSOAPEndpoint;
+    }
+
+    // Fetch the value asynchronously
+    final fetchedValue = await wsdl.getSoapUrl();
+
+    // Cache the fetched value
+    _cachedSOAPEndpoint = fetchedValue;
+
+    // Return the fetched value
+    return fetchedValue;
+  }
+
+  SoapClient(String wsdlEndpoint) : wsdl = WsdlParser(wsdlEndpoint);
 
   Future<String> callWebService(
       String methodName, Map<String, dynamic> parameters) async {
     final soapEnvelope = _buildSoapEnvelope(methodName, parameters);
     final response = await http.post(
-      Uri.parse(endpoint),
+      Uri.parse(await soapEndpoint),
       headers: {
         'Content-Type': 'text/xml',
       },
