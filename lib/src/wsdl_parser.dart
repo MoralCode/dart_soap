@@ -37,7 +37,7 @@ class WsdlParser {
   }
 
   List<String> extractOperations(String wsdlContent) {
-    final document = xml.XmlDocument.parse(wsdlContent);
+    final document = await wsdlDocument;
     final operations = <String>[];
 
     for (var portTypeElement in document.findAllElements('portType')) {
@@ -53,7 +53,7 @@ class WsdlParser {
   }
 
   String parseResponseDataElement(String operationName) {
-    final document = xml.XmlDocument.parse(wsdlContent);
+    final document = await wsdlDocument;
     final operationElement = document.findAllElements('operation').firstWhere(
         (element) => element.getAttribute('name') == operationName,
         orElse: () => null);
@@ -76,7 +76,7 @@ class WsdlParser {
   }
 
   String? parseSoapUrl() {
-    final document = xml.XmlDocument.parse(wsdlContent);
+    final document = await wsdlDocument;
 
     final soapAddressElement = document.findAllElements('soap:address').first;
     return soapAddressElement.getAttribute('location');
