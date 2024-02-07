@@ -13,17 +13,19 @@ class WsdlDocument {
   factory WsdlDocument.fromXml(String xmlContent) {
     final document = xml.XmlDocument.parse(xmlContent);
 
-    final serviceName =
-        document.findAllElements('service').first.getAttribute('name')!;
+    final serviceName = document
+        .findAllElements('service', namespace: '*')
+        .first
+        .getAttribute('name')!;
 
     final operations = document
-        .findAllElements('operation')
+        .findAllElements('operation', namespace: '*')
         .map((operationElement) =>
             WsdlOperation.fromXmlElement(operationElement))
         .toList();
 
     final types = document
-        .findAllElements('types')
+        .findAllElements('types', namespace: '*')
         .map((typesElement) => WsdlType.fromXmlElement(typesElement))
         .toList();
 
@@ -44,10 +46,14 @@ class WsdlOperation {
 
   factory WsdlOperation.fromXmlElement(xml.XmlElement element) {
     final name = element.getAttribute('name')!;
-    final inputMessage =
-        element.findElements('input').first.getAttribute('message')!;
-    final outputMessage =
-        element.findElements('output').first.getAttribute('message')!;
+    final inputMessage = element
+        .findElements('input', namespace: '*')
+        .first
+        .getAttribute('message')!;
+    final outputMessage = element
+        .findElements('output', namespace: '*')
+        .first
+        .getAttribute('message')!;
 
     return WsdlOperation(
         name: name, inputMessage: inputMessage, outputMessage: outputMessage);
@@ -63,7 +69,7 @@ class WsdlType {
   factory WsdlType.fromXmlElement(xml.XmlElement element) {
     final name = element.getAttribute('name')!;
     final elements = element
-        .findAllElements('element')
+        .findAllElements('element', namespace: '*')
         .map((elementElement) => WsdlElement.fromXmlElement(elementElement))
         .toList();
 
