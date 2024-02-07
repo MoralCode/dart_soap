@@ -53,13 +53,3 @@ class WsdlParser {
   }
 }
 
-void main() async {
-  final wsdlParser = WsdlParser('http://www.example.com/your-service.wsdl');
-
-  try {
-    final soapUrl = await wsdlParser.getSoapUrl();
-    print('SOAP URL: $soapUrl');
-  } catch (e) {
-    print('Error: $e');
-  }
-}
