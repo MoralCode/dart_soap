@@ -19,6 +19,8 @@ class WsdlDocument {
         .getAttribute('name')!;
 
     final operations = document
+        .findAllElements('portType', namespace: '*')
+        .first
         .findAllElements('operation', namespace: '*')
         .map((operationElement) =>
             WsdlOperation.fromXmlElement(operationElement))
