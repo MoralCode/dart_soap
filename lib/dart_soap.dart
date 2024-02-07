@@ -39,6 +39,7 @@ class SoapClient {
       Uri.parse(await soapEndpoint),
       headers: {
         'Content-Type': 'text/xml',
+        'SOAPAction': 'http://tempuri.org/IService/add'
       },
       body: soapEnvelope,
     );
@@ -62,14 +63,14 @@ class SoapClient {
     // Customize this method to construct the SOAP envelope based on the WSDL of your web service.
     // This is a simplified example.
     final envelope = xml.XmlBuilder();
-    envelope.element('soapenv:Envelope', namespaces: <String, String>{
-      'tns': 'http://schemas.xmlsoap.org/soap/envelope/',
+    envelope.element('soap:Envelope', namespaces: <String, String>{
+      'http://schemas.xmlsoap.org/soap/envelope/': 'soap',
     }, nest: () {
-      envelope.namespace('web', 'http://www.example.com/webservice');
-
-      envelope.element('soapenv:Header', nest: () {});
-      envelope.element('soapenv:Body', nest: () {
-        envelope.element('web:$methodName', nest: () {
+      envelope.element('soap:Header', nest: () {});
+      envelope.element('soap:Body', nest: () {
+        envelope.element('$methodName', namespaces: <String, String>{
+          "http://tempuri.org/": '',
+        }, nest: () {
           for (var entry in parameters.entries) {
             envelope.element(entry.key, nest: entry.value.toString());
           }
