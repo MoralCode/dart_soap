@@ -17,6 +17,20 @@ class WsdlParser {
     }
   }
 
+  List<String> extractOperations(String wsdlContent) {
+    final document = xml.XmlDocument.parse(wsdlContent);
+    final operations = <String>[];
+
+    for (var portTypeElement in document.findAllElements('portType')) {
+      for (var operationElement in portTypeElement.findElements('operation')) {
+        final operationName = operationElement.getAttribute('name');
+        operations.add(operationName);
+      }
+    }
+
+    return operations;
+  }
+
   String parseSoapUrl(String wsdlContent) {
     final document = xml.XmlDocument.parse(wsdlContent);
 
