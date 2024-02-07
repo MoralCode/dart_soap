@@ -48,11 +48,11 @@ class WsdlOperation {
     final name = element.getAttribute('name')!;
     final inputMessage = element
         .findElements('input', namespace: '*')
-        .first
+        .firstWhere((element) => element.getAttribute('message') != null)
         .getAttribute('message')!;
     final outputMessage = element
         .findElements('output', namespace: '*')
-        .first
+        .firstWhere((element) => element.getAttribute('message') != null)
         .getAttribute('message')!;
 
     return WsdlOperation(
