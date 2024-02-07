@@ -36,7 +36,7 @@ class WsdlParser {
     }
   }
 
-  List<String> extractOperations(String wsdlContent) {
+  Future<List<String>> extractOperations() async {
     final document = await wsdlDocument;
     final operations = <String>[];
 
@@ -52,7 +52,7 @@ class WsdlParser {
     return operations;
   }
 
-  String parseResponseDataElement(String operationName) {
+  Future<String> parseResponseDataElement(String operationName) async {
     final document = await wsdlDocument;
     final operationElement = document.findAllElements('operation').firstWhere(
         (element) => element.getAttribute('name') == operationName,
@@ -75,19 +75,20 @@ class WsdlParser {
     }
   }
 
-  String? parseSoapUrl() {
+  Future<String?> parseSoapUrl() async {
     final document = await wsdlDocument;
 
     final soapAddressElement = document.findAllElements('soap:address').first;
     return soapAddressElement.getAttribute('location');
   }
 
-  Future<String> getSoapUrl() async {
-    try {
-      return parseSoapUrl();
-    } catch (e) {
-      throw Exception('Error reading or parsing the WSDL file: $e');
-    }
-  }
-}
+  //TODO: parseSoapURLs for handling multiple urls
 
+  // Future<String> getSoapUrl() async {
+  //   try {
+  //     return parseSoapUrl();
+  //   } catch (e) {
+  //     throw Exception('Error reading or parsing the WSDL file: $e');
+  //   }
+  // }
+}
