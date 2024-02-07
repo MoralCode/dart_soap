@@ -6,9 +6,24 @@ class WsdlParser {
 
   WsdlParser(this.wsdlUrl);
 
-  // getter for caching WSDLContent
+  xml.XmlDocument? _cachedWSDLDocument;
 
-  String get wsdlContent => "";
+  Future<xml.XmlDocument> get wsdlDocument async {
+    // If the value is already cached, return it immediately
+    if (_cachedWSDLDocument != null) {
+      return _cachedWSDLDocument!;
+    }
+
+    // Fetch the value asynchronously
+    final fetchedValue =
+        await fetchWsdl().then((value) => xml.XmlDocument.parse(value));
+
+    // Cache the fetched value
+    _cachedWSDLDocument = fetchedValue;
+
+    // Return the fetched value
+    return fetchedValue;
+  }
 
   Future<String> fetchWsdl() async {
     final response = await http.get(Uri.parse(wsdlUrl));
