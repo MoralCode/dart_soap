@@ -6,6 +6,10 @@ class WsdlParser {
 
   WsdlParser(this.wsdlUrl);
 
+  // getter for caching WSDLContent
+
+  String get wsdlContent => "";
+
   Future<String> fetchWsdl() async {
     final response = await http.get(Uri.parse(wsdlUrl));
 
@@ -24,27 +28,25 @@ class WsdlParser {
     for (var portTypeElement in document.findAllElements('portType')) {
       for (var operationElement in portTypeElement.findElements('operation')) {
         final operationName = operationElement.getAttribute('name');
-        operations.add(operationName);
+        if (operationName != null) {
+          operations.add(operationName);
+        }
       }
     }
 
     return operations;
   }
 
-  String parseSoapUrl(String wsdlContent) {
+  String? parseSoapUrl() {
     final document = xml.XmlDocument.parse(wsdlContent);
 
     final soapAddressElement = document.findAllElements('soap:address').first;
-
-    final soapUrl = soapAddressElement.getAttribute('location');
-    return soapUrl;
+    return soapAddressElement.getAttribute('location');
   }
 
   Future<String> getSoapUrl() async {
     try {
-      final wsdlContent = await fetchWsdl();
-      final soapUrl = parseSoapUrl(wsdlContent);
-      return soapUrl;
+      return parseSoapUrl();
     } catch (e) {
       throw Exception('Error reading or parsing the WSDL file: $e');
     }
