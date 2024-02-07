@@ -6,6 +6,7 @@ import 'package:xml/xml.dart' as xml;
 
 class SoapClient {
   final WsdlParser wsdl;
+  bool debug;
 
   String _cachedSOAPEndpoint = '';
 
@@ -25,7 +26,8 @@ class SoapClient {
     return fetchedValue;
   }
 
-  SoapClient(String wsdlEndpoint) : wsdl = WsdlParser(wsdlEndpoint);
+  SoapClient(String wsdlEndpoint, {this.debug = false})
+      : wsdl = WsdlParser(wsdlEndpoint);
 
   Future<String> callWebService(
       String methodName, Map<String, dynamic> parameters) async {
