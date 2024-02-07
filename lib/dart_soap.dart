@@ -57,10 +57,9 @@ class SoapClient {
     // Customize this method to construct the SOAP envelope based on the WSDL of your web service.
     // This is a simplified example.
     final envelope = xml.XmlBuilder();
-    envelope.element('soapenv:Envelope',
-        namespace: 'http://schemas.xmlsoap.org/soap/envelope/', nest: () {
-      envelope.namespace(
-          'soapenv', 'http://schemas.xmlsoap.org/soap/envelope/');
+    envelope.element('soapenv:Envelope', namespaces: <String, String>{
+      'tns': 'http://schemas.xmlsoap.org/soap/envelope/',
+    }, nest: () {
       envelope.namespace('web', 'http://www.example.com/webservice');
 
       envelope.element('soapenv:Header', nest: () {});
