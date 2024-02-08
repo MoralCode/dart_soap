@@ -1,5 +1,8 @@
 library dart_soap;
 
+import 'package:dart_soap/src/wsdl_document.dart';
+export 'package:dart_soap/src/wsdl_document.dart' show WsdlDocument;
+
 import 'package:dart_soap/src/wsdl_parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart' as xml;
@@ -56,6 +59,10 @@ class SoapClient {
       throw Exception(
           'Failed to parse the response from the web service. Error: $e');
     }
+  }
+
+  Future<WsdlDocument> getDoc() {
+    return wsdl.parse();
   }
 
   String _buildSoapEnvelope(

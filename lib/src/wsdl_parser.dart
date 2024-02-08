@@ -1,6 +1,8 @@
 import 'package:xml/xml.dart' as xml;
 import 'package:http/http.dart' as http;
 
+import 'wsdl_document.dart';
+
 class WsdlParser {
   final String wsdlUrl;
 
@@ -34,6 +36,10 @@ class WsdlParser {
       throw Exception(
           'Failed to fetch WSDL file. Status code: ${response.statusCode}');
     }
+  }
+
+  Future<WsdlDocument> parse() {
+    return fetchWsdl().then((value) => WsdlDocument.fromXml(value));
   }
 
   Future<List<String>> extractOperations() async {
