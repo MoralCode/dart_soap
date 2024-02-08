@@ -101,7 +101,7 @@ class WsdlComplexType {
   WsdlComplexType({required this.name, required this.elements});
 
   factory WsdlComplexType.fromXmlElement(xml.XmlElement element) {
-    final name = element.getAttribute('name');
+    final name = element.getAttribute('name')!;
     final elements = element
         .findAllElements('element')
         .map((elementElement) => WsdlElement.fromXmlElement(elementElement))
