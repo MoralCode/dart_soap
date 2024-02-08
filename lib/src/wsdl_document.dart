@@ -63,19 +63,19 @@ class WsdlOperation {
 }
 
 class WsdlType {
-  final String name;
+  final String targetNamespace;
   final List<WsdlElement> elements;
 
-  WsdlType({required this.name, required this.elements});
+  WsdlType({required this.targetNamespace, required this.elements});
 
   factory WsdlType.fromXmlElement(xml.XmlElement element) {
-    final name = element.getAttribute('name')!;
+    final targetNamespace = element.getAttribute('targetNamespace')!;
     final elements = element
         .findAllElements('element', namespace: '*')
         .map((elementElement) => WsdlElement.fromXmlElement(elementElement))
         .toList();
 
-    return WsdlType(name: name, elements: elements);
+    return WsdlType(targetNamespace: targetNamespace, elements: elements);
   }
 }
 
