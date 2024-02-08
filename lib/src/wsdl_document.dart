@@ -28,6 +28,8 @@ class WsdlDocument {
 
     final types = document
         .findAllElements('types', namespace: '*')
+        .first
+        .findAllElements('schema', namespace: '*')
         .map((typesElement) => WsdlType.fromXmlElement(typesElement))
         .toList();
 
