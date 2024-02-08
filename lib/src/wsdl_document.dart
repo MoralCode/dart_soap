@@ -92,3 +92,21 @@ class WsdlElement {
     return WsdlElement(name: name, type: type);
   }
 }
+
+
+class WsdlComplexType {
+  final String name;
+  final List<WsdlElement> elements;
+
+  WsdlComplexType({required this.name, required this.elements});
+
+  factory WsdlComplexType.fromXmlElement(xml.XmlElement element) {
+    final name = element.getAttribute('name');
+    final elements = element
+        .findAllElements('element')
+        .map((elementElement) => WsdlElement.fromXmlElement(elementElement))
+        .toList();
+
+    return WsdlComplexType(name: name, elements: elements);
+  }
+}
