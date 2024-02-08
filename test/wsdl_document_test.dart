@@ -33,16 +33,15 @@ void main() {
 
       final complexTypeElement = xml.XmlDocument.parse(wsdlContent)
           .rootElement
-          .findElements('complexType')
+          .findElements('element', namespace: '*')
           .first;
-      final wsdlComplexType =
-          WsdlComplexType.fromXmlElement(complexTypeElement);
+      final wsdlComplexType = WsdlElement.fromXmlElement(complexTypeElement);
 
       // print('Complex Type Name: ${wsdlComplexType.name}');
       expect(wsdlComplexType.name, 'ExampleElement');
       // print('Child Elements:');
-      expect(wsdlComplexType.elements[0].name, 'Name');
-      expect(wsdlComplexType.elements[1].name, 'Age');
+      expect(wsdlComplexType.children[0].name, 'Name');
+      expect(wsdlComplexType.children[1].name, 'Age');
 
       // for (var element in wsdlComplexType.elements) {
       //   print('  - ${element.name} (${element.type})');
