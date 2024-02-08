@@ -84,23 +84,33 @@ class WsdlType {
 class WsdlElement {
   final String name;
   final String type;
-  final List<WsdlElement>? children;
+  final List<WsdlElement> children;
 
-  WsdlElement({required this.name, required this.type, this.children});
+  WsdlElement(
+      {required this.name,
+      required this.type,
+      children = const <WsdlElement>[]})
+      : children = children;
 
   factory WsdlElement.fromXmlElement(xml.XmlElement element) {
-    print(element);
 
-    final name = element.getAttribute('name')!;
+    final name = element.getAttribute('name') ?? '';
     final type = element.getAttribute('type') ?? '';
 
-    final children = element
-        .findAllElements('complexType', namespace: '*')
-        .first
-        .findAllElements('sequence', namespace: '*')
-        .map((elementElement) => WsdlElement.fromXmlElement(elementElement))
-        .toList();
+    if (element.getAttribute('type') == null ||
+        element.getAttribute('name') == null) {
+      final children = element
+          .findAllElements('complexType', namespace: '*')
+          .first
+          .findAllElements('sequence', namespace: '*')
+          .first
+          .findAllElements('element', namespace: '*')
+          .map((elementElement) => WsdlElement.fromXmlElement(elementElement))
+          .toList();
 
-    return WsdlElement(name: name, type: type, children: children);
+      return WsdlElement(name: name, type: type, children: children);
+    } else {
+      return WsdlElement(name: name, type: type);
+    }
   }
 }
