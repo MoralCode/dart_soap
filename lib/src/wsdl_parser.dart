@@ -58,13 +58,15 @@ class WsdlParser {
         .findAllElements('operation', namespace: '*')
         .firstWhere((element) => element.getAttribute('name') == operationName);
 
-    final outputElementName =
-        operationElement.findElements('output').first.getAttribute('message');
+    final outputElementName = operationElement
+        .findElements('output', namespace: '*')
+        .first
+        .getAttribute('message');
     final responseDataElementName = document
-        .findAllElements('message')
+        .findAllElements('message', namespace: '*')
         .firstWhere(
             (element) => element.getAttribute('name') == outputElementName)
-        .findAllElements('part')
+        .findAllElements('part', namespace: '*')
         .first
         .getAttribute('name');
     if (responseDataElementName != null) {
